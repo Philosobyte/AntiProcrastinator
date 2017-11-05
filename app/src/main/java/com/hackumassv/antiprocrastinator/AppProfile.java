@@ -110,7 +110,7 @@ public class AppProfile implements Comparable<AppProfile>, Iterable<TimeEvent> {
     }
 
     public int compareTo(AppProfile comparingProfile) {
-        return (int)(comparingProfile.getTotalTime() - getTotalTime());
+        return (int)(getTotalTime() - comparingProfile.getTotalTime());
     }
 
 
