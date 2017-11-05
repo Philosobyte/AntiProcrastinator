@@ -2,6 +2,7 @@ package com.hackumassv.antiprocrastinator;
 
 
 import android.app.usage.UsageEvents;
+import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 
 import android.content.Context;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by Travis on 11/4/2017.
@@ -74,6 +76,33 @@ public class ProfileList implements Iterable<ProfileList>{
                 eventProfile.proposeEndTime(timeStamp);
             }
         }
+
+        //Calculate the time before app
+        List<UsageStats> usageStatsListYear =  statsManager.queryUsageStats(
+                UsageStatsManager.INTERVAL_YEARLY,time - DELTA_YEAR,time);
+        for(int i = 0; i < usageStatsListYear.size(); i++){
+
+            long timeInForeground = usageStatsListYear.get(i).getTotalTimeInForeground();
+
+            if (timeInForeground > 0) {
+                String appName = usageStatsListYear.get(i).getPackageName();
+                AppProfile usageProfile = null;
+                for(AppProfile iterProfile : profileList){
+                    if (iterProfile.getName().compareTo(event.getPackageName()) == 0){
+                        usageProfile = iterProfile;
+                        break;
+                    }
+                }
+                if (usageProfile == null){
+                    usageProfile = new AppProfile(context, event.getPackageName());
+                    profileList.add(usageProfile);
+                }
+
+                usageProfile.setTimeBeforeApp(timeInForeground);
+
+            }//End if
+        }//End for
+
 
 
     }
