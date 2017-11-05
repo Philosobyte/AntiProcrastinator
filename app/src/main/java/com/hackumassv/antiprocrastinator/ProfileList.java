@@ -88,16 +88,17 @@ public class ProfileList implements Iterable<ProfileList>{
                 String appName = usageStatsListYear.get(i).getPackageName();
                 AppProfile usageProfile = null;
                 for(AppProfile iterProfile : profileList){
-                    if (iterProfile.getName().compareTo(event.getPackageName()) == 0){
+                    if (iterProfile.getName().compareTo(appName) == 0){
                         usageProfile = iterProfile;
                         break;
                     }
                 }
                 if (usageProfile == null){
-                    usageProfile = new AppProfile(context, event.getPackageName());
+                    usageProfile = new AppProfile(context,appName);
                     profileList.add(usageProfile);
                 }
-
+                System.out.println(usageProfile.returnAppName());
+                System.out.println(timeInForeground);
                 usageProfile.setTimeBeforeApp(timeInForeground);
 
             }//End if

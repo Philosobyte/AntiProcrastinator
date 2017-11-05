@@ -58,6 +58,11 @@ public class AntiProcrastinator extends AppCompatActivity implements OnChartValu
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //Binary Switch!
+        boolean binarySwitch = false;
+        //Binary Switch!
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_anti_procrastinator);
 
@@ -80,7 +85,8 @@ public class AntiProcrastinator extends AppCompatActivity implements OnChartValu
         chart.getXAxis().setDrawGridLines(false);
         List<BarEntry> entries = new ArrayList<>();
         BarDataSet dataSet;
-        if(false)
+
+        if(binarySwitch)
         { for(int i=0; i<testList.size(); i++)
         {
             if(testList.getProfile(i).timeInMinutes()>10)
@@ -156,48 +162,4 @@ public class AntiProcrastinator extends AppCompatActivity implements OnChartValu
         return mode == MODE_ALLOWED;
     }
 
-    private void printTimeInForeground(Context context){
-
-        long time = System.currentTimeMillis();
-        long deltaDay = 7*24*60*1000;
-        long deltaWeek = 4*7*24*60*1000;
-        long deltaMonth = 6*4*7*24*60*1000;
-        long deltaYear = 2*365*24*60*1000;
-        UsageStatsManager statsManager = context.getSystemService(UsageStatsManager.class);
-        UsageEvents usageEventsWeek = statsManager.queryEvents(time - deltaMonth, time);
-        List<UsageStats> usageStatsListWeek =  statsManager.queryUsageStats(UsageStatsManager.INTERVAL_WEEKLY,time - deltaDay,time);
-        List<UsageStats> usageStatsListDay =  statsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY,time - deltaWeek,time);
-        for(int i = 0; i < usageStatsListDay.size(); i++){
-
-            long timeInForegroundWeek = usageStatsListWeek.get(i).getTotalTimeInForeground();
-            long timeInForegroundDay = usageStatsListDay.get(i).getTotalTimeInForeground();
-
-            if (timeInForegroundWeek > 0) {
-                System.out.println("------------------------------------------------------------------------");
-                System.out.println(usageStatsListDay.get(i).getPackageName());
-                System.out.print("Daily: ");
-                System.out.println(timeInForegroundDay);
-                System.out.println(usageStatsListWeek.get(i).getPackageName());
-                System.out.print("Weekly: ");
-                System.out.println(timeInForegroundWeek);
-                System.out.println();
-                System.out.println(usageStatsListDay.get(i).getLastTimeUsed());
-
-
-            }//End if
-        }//End for
-        UsageEvents.Event event = new UsageEvents.Event();
-        while(usageEventsWeek.hasNextEvent()){
-            System.out.println("__________________________________________________");
-            usageEventsWeek.getNextEvent(event);
-            System.out.println(event.getPackageName());
-            System.out.println(event.getClassName());
-            System.out.print("Event type: ");
-            System.out.println(event.getEventType());
-            System.out.print("Timestamp: ");
-            System.out.println(event.getTimeStamp());
-
-
-        }
-    }
 }

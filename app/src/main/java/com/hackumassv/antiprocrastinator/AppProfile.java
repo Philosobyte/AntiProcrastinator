@@ -46,7 +46,6 @@ public class AppProfile implements Comparable<AppProfile>, Iterable<TimeEvent> {
         this.timeBeforeApp = timeBeforeApp;
     }
 
-
     public String getName() {
         return name;
     }
@@ -55,7 +54,7 @@ public class AppProfile implements Comparable<AppProfile>, Iterable<TimeEvent> {
         return totalTime;
     }
 
-    public long getTotalTimeBeyond() { return timeBeforeApp + totalTime; }
+    public long getTotalTimeBeyond() { return timeBeforeApp; }
 
     public long timeInSecondsBeyond() {
         return getTotalTimeBeyond()/1000;
