@@ -59,7 +59,7 @@ public class Examine extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         //Binary Switch!
-        boolean binarySwitch = false;
+        boolean binarySwitch = true;
         //Binary Switch!
 
         super.onCreate(savedInstanceState);
