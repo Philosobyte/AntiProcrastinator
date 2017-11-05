@@ -22,6 +22,4 @@
 
     <include layout="@layout/content_anti_procrastinator" />
 
-
-
 </android.support.design.widget.CoordinatorLayout>

@@ -78,10 +78,14 @@ public class AntiProcrastinator extends AppCompatActivity {
         chart = findViewById(R.id.chart);
         List<BarEntry> entries = new ArrayList<>();
         BarDataSet dataSet;
-        if (false) {
+        if (true) {
             for(int i=0; i<testList.size(); i++) {
                 if(testList.getProfile(i).timeInMinutes()>10) {
-                    entries.add(new BarEntry(i+1, (float)testList.getProfile(i).timeInHoursDouble(), testList.getProfile(i).returnAppName()));
+                    entries.add(
+                            new BarEntry(
+                                    i+1,
+                                    (float)testList.getProfile(i).timeInHoursDouble(),
+                                    testList.getProfile(i).returnAppName()));
                 }
             }
             dataSet = new BarDataSet(entries, "Hours Spent");
@@ -89,10 +93,14 @@ public class AntiProcrastinator extends AppCompatActivity {
         else {
             for(int i=0; i<testList.size(); i++) {
                 if(testList.getProfile(i).timeInMinutes()>10) {
-                    entries.add(new BarEntry(i+1, (float)testList.getProfile(i).timeInHoursDouble()/testList.getProfile(i).timeEntrySize(), testList.getProfile(i).returnAppName()));
+                    entries.add(
+                            new BarEntry(
+                                    i+1,
+                                    (float)testList.getProfile(i).timeInHoursDouble()/testList.getProfile(i).timeEntrySize(),
+                                    testList.getProfile(i).returnAppName()));
                 }
             }
-            dataSet = new BarDataSet(entries, "Average Time Spent");
+            dataSet = new BarDataSet(entries, "Average Hours per Session");
         }
         BarData barData = new BarData(dataSet);
         barData.setValueFormatter(new IValueFormatter() {
