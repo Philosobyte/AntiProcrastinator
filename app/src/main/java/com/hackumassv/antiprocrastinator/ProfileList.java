@@ -19,19 +19,17 @@ public class ProfileList implements Iterable<ProfileList>{
     public static final long DELTA_WEEK = 4*7*24*60*1000;
     public static final long DELTA_MONTH = 6*4*7*24*60*1000;
     public static final long DELTA_YEAR = 2*365*24*60*1000;
-
-
     private ArrayList<AppProfile> profileList;
     private long firstProcessedTime;
     private long lastProcessedTime;
     private Context context;
 
 
-    public ProfileList(){
+    public ProfileList(Context context){
         profileList = new ArrayList<AppProfile>();
         firstProcessedTime = System.currentTimeMillis();
+        lastProcessedTime = 0;
         this.context=context;
-
     }
 
     //Returns false if already exists
@@ -47,20 +45,35 @@ public class ProfileList implements Iterable<ProfileList>{
     public void processApps(){
         long time = System.currentTimeMillis();
         UsageStatsManager statsManager = context.getSystemService(UsageStatsManager.class);
-        UsageEvents usageEvents = statsManager.queryEvents(lastProcessedTime, time);
+        //"time-DEALTA_MONTH" should be lastprocessedTime
+        UsageEvents usageEvents = statsManager.queryEvents(time-DELTA_MONTH, time);
         UsageEvents.Event event = new UsageEvents.Event();
         while(usageEvents.hasNextEvent()){
             usageEvents.getNextEvent(event);
-            AppProfile eventApp = getProfile(event.getPackageName());
+            AppProfile eventProfile = null;
+            for(AppProfile iterProfile : profileList){
+                if (iterProfile.getName().compareTo(event.getPackageName()) == 0){
+                    eventProfile = iterProfile;
+                    break;
+                }
+            }
+            if (eventProfile == null){
+                eventProfile = new AppProfile(context, event.getPackageName());
+                profileList.add(eventProfile);
+            }
+
+
             int eventType = event.getEventType();
             long timeStamp = event.getTimeStamp();
             if (eventType == UsageEvents.Event.MOVE_TO_FOREGROUND) { //Pulled to Foreground
-                eventApp.proposeStartTime(timeStamp);
+                eventProfile.proposeStartTime(timeStamp);
             }
             else if (eventType == UsageEvents.Event.MOVE_TO_BACKGROUND) {
-                eventApp.proposeEndTime(timeStamp);
+                eventProfile.proposeEndTime(timeStamp);
             }
         }
+
+
     }
 
 
@@ -72,6 +85,15 @@ public class ProfileList implements Iterable<ProfileList>{
 
     public Iterator iterator() {
         return profileList.iterator();
+    }
+
+    public String toString() {
+        String returnString = "";
+        for(AppProfile profile : profileList){
+
+            returnString+="\n" + profile.toString();
+        }
+        return returnString;
     }
 
 

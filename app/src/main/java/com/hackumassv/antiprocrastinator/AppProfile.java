@@ -73,8 +73,10 @@ public class AppProfile implements Comparable<AppProfile>, Iterable<TimeEvent>{
     }
 
     public void proposeEndTime(long proposedEndTime) {
-        addTimeEvent(proposedStartTime, proposedEndTime);
-        proposedStartTime = -1;
+        if (proposedStartTime > 0) {
+            addTimeEvent(proposedStartTime, proposedEndTime);
+            proposedStartTime = -1;
+        }
     }
 
     public String toString() {

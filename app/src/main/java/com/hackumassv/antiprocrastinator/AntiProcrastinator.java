@@ -32,6 +32,17 @@ public class AntiProcrastinator extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_anti_procrastinator);
 
+        if(!checkForPermission(this)) {
+            startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+        }
+
+        //Start test code!
+        ProfileList testList = new ProfileList(this);
+        testList.processApps();
+
+        System.out.println(testList.toString());
+
+        //End test code!
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
