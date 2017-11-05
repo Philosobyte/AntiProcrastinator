@@ -77,12 +77,23 @@ public class AntiProcrastinator extends AppCompatActivity {
         setSupportActionBar(toolbar);
         chart = findViewById(R.id.chart);
         List<BarEntry> entries = new ArrayList<>();
-        for(int i=0; i<testList.size(); i++)
-        {
-            if(testList.getProfile(i).timeInMinutes()>10)
-            { entries.add(new BarEntry(i+1, testList.getProfile(i).timeInMinutes(), testList.getProfile(i).returnAppName()));}
+        BarDataSet dataSet;
+        if (false) {
+            for(int i=0; i<testList.size(); i++) {
+                if(testList.getProfile(i).timeInMinutes()>10) {
+                    entries.add(new BarEntry(i+1, (float)testList.getProfile(i).timeInHoursDouble(), testList.getProfile(i).returnAppName()));
+                }
+            }
+            dataSet = new BarDataSet(entries, "Hours Spent");
         }
-        BarDataSet dataSet = new BarDataSet(entries, "Minutes Spent");
+        else {
+            for(int i=0; i<testList.size(); i++) {
+                if(testList.getProfile(i).timeInMinutes()>10) {
+                    entries.add(new BarEntry(i+1, (float)testList.getProfile(i).timeInHoursDouble()/testList.getProfile(i).timeEntrySize(), testList.getProfile(i).returnAppName()));
+                }
+            }
+            dataSet = new BarDataSet(entries, "Average Time Spent");
+        }
         BarData barData = new BarData(dataSet);
         barData.setValueFormatter(new IValueFormatter() {
             @Override
