@@ -110,7 +110,6 @@ public class AntiProcrastinator extends AppCompatActivity implements OnChartValu
     @Override
     public void onValueSelected(Entry e, Highlight h) {
         Log.i("Developer", e.toString() + " selected");
-
     }
 
     @Override
