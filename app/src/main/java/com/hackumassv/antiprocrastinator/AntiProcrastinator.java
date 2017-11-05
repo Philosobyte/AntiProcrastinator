@@ -17,6 +17,23 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.HorizontalBarChart;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static android.app.AppOpsManager.MODE_ALLOWED;
@@ -26,6 +43,7 @@ public class AntiProcrastinator extends AppCompatActivity {
 
     //The manager of stats
     public UsageStatsManager statsManager;
+    public HorizontalBarChart chart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +51,28 @@ public class AntiProcrastinator extends AppCompatActivity {
         setContentView(R.layout.activity_anti_procrastinator);
         
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        HorizontalBarChart chart = findViewById(R.id.chart);
+        List<BarEntry> entries = new ArrayList<>();
+        entries.add(new BarEntry(1, 1, R.drawable.random_icon));
+        entries.add(new BarEntry(2, 4, R.drawable.random_icon));
+        entries.add(new BarEntry(3, 9, R.drawable.random_icon));
+        entries.add(new BarEntry(4, 16, R.drawable.random_icon));
+        entries.add(new BarEntry(5, 25, R.drawable.random_icon));
+        YAxis yaxis = chart.getAxisLeft();
+        yaxis.setDrawLabels(true);
+        yaxis.setValueFormatter(new IndexAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return "someString";
+            }
+        });
+        BarDataSet dataSet = new BarDataSet(entries, "Label");
+        BarData barData = new BarData(dataSet);
+        chart.setData(barData);
+        chart.invalidate();
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
