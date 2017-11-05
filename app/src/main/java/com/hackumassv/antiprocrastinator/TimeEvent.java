@@ -9,11 +9,13 @@ package com.hackumassv.antiprocrastinator;
 public class TimeEvent {
 
     private long startTime;
+    private long totalTime;
     private long endTime;
 
     public TimeEvent(long startTime, long endTime){
         this.startTime = startTime;
         this.endTime = endTime;
+        totalTime = endTime - startTime;
     }
 
     public long getStartTime(){
@@ -22,6 +24,9 @@ public class TimeEvent {
 
     public long getEndTime(){
         return endTime;
+    }
+    public long getTotalTime(){
+        return totalTime;
     }
 
     public String toString(){

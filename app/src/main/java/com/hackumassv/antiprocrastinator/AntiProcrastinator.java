@@ -68,6 +68,7 @@ public class AntiProcrastinator extends AppCompatActivity implements OnChartValu
         //Start test code!
         ProfileList testList = new ProfileList(this);
         testList.processApps();
+        testList.sort();
 
         System.out.println(testList.toString());
 

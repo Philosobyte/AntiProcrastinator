@@ -13,7 +13,7 @@ import java.util.Iterator;
  * Created by Travis on 11/4/2017.
  */
 
-public class AppProfile implements Comparable<AppProfile>, Iterable<TimeEvent>{
+public class AppProfile implements Comparable<AppProfile>, Iterable<TimeEvent> {
 
     private String name;
     private ArrayList<TimeEvent> timeList;
@@ -23,7 +23,7 @@ public class AppProfile implements Comparable<AppProfile>, Iterable<TimeEvent>{
     private long proposedStartTime;
     private Context context;
 
-    public AppProfile(Context context, String name){
+    public AppProfile(Context context, String name) {
         this.name=name;
         this.context=context;
         timeList = new ArrayList<TimeEvent>();
@@ -32,9 +32,10 @@ public class AppProfile implements Comparable<AppProfile>, Iterable<TimeEvent>{
         proposedStartTime = -1;
     }
 
-    public void addTimeEvent(long startTime, long endTime){
+    public TimeEvent addTimeEvent(long startTime, long endTime) {
         TimeEvent newEvent = new TimeEvent(startTime,endTime);
         timeList.add(newEvent);
+        return newEvent;
     }
 
     public int timeEntrySize() {
@@ -45,13 +46,47 @@ public class AppProfile implements Comparable<AppProfile>, Iterable<TimeEvent>{
         this.timeBeforeApp = timeBeforeApp;
     }
 
+
     public String getName() {
         return name;
     }
 
-    public int compareTo(AppProfile comparingProfile) {
-        return getName().compareTo(comparingProfile.getName());
+    public long getTotalTime() {
+        return totalTime;
     }
+
+    public long timeInSeconds() {
+        return totalTime/1000;
+    }
+
+    public long timeInMinutes() {
+        return totalTime/(1000*60);
+    }
+
+    public long timeInHours() {
+        return totalTime/(1000*60*60);
+    }
+    public double timeInHoursDouble() {
+        return (double) totalTime/(1000*60*60);
+    }
+
+    public String timeFormated() {
+        long seconds = timeInSeconds();
+        long minutes = timeInMinutes();
+        long hours = timeInHours();
+
+        minutes-= hours * 60;
+        seconds-= (hours*60*60 + minutes * 60);
+        return hours + ":" + minutes + ":" + seconds;
+
+    }
+
+    public int compareTo(AppProfile comparingProfile) {
+        return (int)(comparingProfile.getTotalTime() - getTotalTime());
+    }
+
+
+
     public String returnAppName() {
 
         PackageManager pm = context.getPackageManager();
@@ -74,16 +109,15 @@ public class AppProfile implements Comparable<AppProfile>, Iterable<TimeEvent>{
 
     public void proposeEndTime(long proposedEndTime) {
         if (proposedStartTime > 0) {
-            addTimeEvent(proposedStartTime, proposedEndTime);
+            TimeEvent newEvent = addTimeEvent(proposedStartTime, proposedEndTime);
+            totalTime+= newEvent.getTotalTime();
             proposedStartTime = -1;
         }
     }
 
     public String toString() {
-        String returnString = "Name: " + name;
-        for(TimeEvent event : timeList){
-            returnString+= "\n  " + event.toString();
-        }
+        String returnString = "Name: " + returnAppName();
+        returnString+= "\n Time: "+timeFormated();
         return returnString;
     }
 

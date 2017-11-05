@@ -7,6 +7,8 @@ import android.app.usage.UsageStatsManager;
 import android.content.Context;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 
 /**
@@ -77,10 +79,24 @@ public class ProfileList implements Iterable<ProfileList>{
     }
 
 
+    public int size() {
+        return profileList.size();
+    }
+
     public AppProfile getProfile(String name){
-        AppProfile toFind = new AppProfile(context,name);
-        int index = profileList.indexOf(toFind);
+        for(AppProfile profile: profileList){
+            if (profile.getName().compareTo(name) == 0)
+                return profile;
+        }
+        return null;
+    }
+
+    public AppProfile getProfile(int index){
         return profileList.get(index);
+    }
+
+    public void sort(){
+        Collections.sort(profileList);
     }
 
     public Iterator iterator() {
