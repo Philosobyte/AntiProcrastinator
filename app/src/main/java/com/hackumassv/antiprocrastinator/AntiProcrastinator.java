@@ -79,12 +79,23 @@ public class AntiProcrastinator extends AppCompatActivity implements OnChartValu
         chart = findViewById(R.id.chart);
         chart.getXAxis().setDrawGridLines(false);
         List<BarEntry> entries = new ArrayList<>();
-        for(int i=0; i<testList.size(); i++)
+        BarDataSet dataSet;
+        if(false)
+        { for(int i=0; i<testList.size(); i++)
         {
             if(testList.getProfile(i).timeInMinutes()>10)
-            { entries.add(new BarEntry(i+1, testList.getProfile(i).timeInMinutes(), testList.getProfile(i).returnAppName()));}
+            { entries.add(new BarEntry(i+1, (float)testList.getProfile(i).timeInHoursDouble(), testList.getProfile(i).returnAppName()));}
         }
-        BarDataSet dataSet = new BarDataSet(entries, "Minutes Spent");
+            dataSet = new BarDataSet(entries, "Hours Spent");
+        }
+        else {
+            for(int i=0; i<testList.size(); i++)
+            {
+                if(testList.getProfile(i).timeInMinutes()>10)
+                { entries.add(new BarEntry(i+1, (float)testList.getProfile(i).timeInHoursDouble()/testList.getProfile(i).timeEntrySize(), testList.getProfile(i).returnAppName()));}
+            }
+            dataSet = new BarDataSet(entries, "Average Time Spent");
+        }
         BarData barData = new BarData(dataSet);
         barData.setValueFormatter(new IValueFormatter() {
             @Override
@@ -94,16 +105,16 @@ public class AntiProcrastinator extends AppCompatActivity implements OnChartValu
         });
         chart.setData(barData);
         chart.invalidate();
-        FloatingActionButton fab = findViewById(R.id.fab);
+        //FloatingActionButton fab = findViewById(R.id.fab);
         chart.setDrawValueAboveBar(true);
         chart.setOnChartValueSelectedListener(this);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+ //       });
 
     }
 
