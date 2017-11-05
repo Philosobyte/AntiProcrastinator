@@ -46,13 +46,41 @@ public class AppProfile implements Comparable<AppProfile>, Iterable<TimeEvent> {
         this.timeBeforeApp = timeBeforeApp;
     }
 
-
     public String getName() {
         return name;
     }
 
     public long getTotalTime() {
         return totalTime;
+    }
+
+    public long getTotalTimeBeyond() { return timeBeforeApp; }
+
+    public long timeInSecondsBeyond() {
+        return getTotalTimeBeyond()/1000;
+    }
+
+    public long timeInMinutesBeyond() {
+        return getTotalTimeBeyond()/(1000*60);
+    }
+
+    public long timeInHoursBeyond() {
+        return getTotalTimeBeyond()/(1000*60*60);
+    }
+
+    public double timeInHoursDoubleBeyond() {
+        return (double) getTotalTimeBeyond()/(1000*60*60);
+    }
+
+    public String timeFormatedBeyond() {
+        long seconds = timeInSecondsBeyond();
+        long minutes = timeInMinutesBeyond();
+        long hours = timeInHoursBeyond();
+
+        minutes-= hours * 60;
+        seconds-= (hours*60*60 + minutes * 60);
+        return hours + ":" + minutes + ":" + seconds;
+
     }
 
     public long timeInSeconds() {
