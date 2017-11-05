@@ -8,18 +8,11 @@
     tools:context="com.hackumassv.antiprocrastinator.AntiProcrastinator"
     tools:showIn="@layout/activity_anti_procrastinator">
 
-    <TextView
-        android:id="@+id/hello_world"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        android:layout_centerHorizontal="true" />
 
     <com.github.mikephil.charting.charts.HorizontalBarChart
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:id="@+id/chart"
-        android:layout_below="@id/hello_world"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
