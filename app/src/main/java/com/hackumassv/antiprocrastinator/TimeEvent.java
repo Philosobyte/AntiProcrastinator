@@ -24,4 +24,8 @@ public class TimeEvent {
         return endTime;
     }
 
+    public String toString(){
+        return startTime + " " + endTime;
+    }
+
 }
