@@ -6,6 +6,10 @@ import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Process;
 import android.provider.Settings;
@@ -13,6 +17,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,7 +35,12 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.MPPointF;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,11 +49,12 @@ import java.util.List;
 import static android.app.AppOpsManager.MODE_ALLOWED;
 import static android.app.AppOpsManager.OPSTR_GET_USAGE_STATS;
 
-public class AntiProcrastinator extends AppCompatActivity {
+public class AntiProcrastinator extends AppCompatActivity implements OnChartValueSelectedListener {
 
     //The manager of stats
     public UsageStatsManager statsManager;
     public HorizontalBarChart chart;
+    protected RectF mOnValueSelectedRectF = new RectF();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,26 +75,26 @@ public class AntiProcrastinator extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        HorizontalBarChart chart = findViewById(R.id.chart);
+        chart = findViewById(R.id.chart);
         List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(1, 1, R.drawable.random_icon));
-        entries.add(new BarEntry(2, 4, R.drawable.random_icon));
-        entries.add(new BarEntry(3, 9, R.drawable.random_icon));
-        entries.add(new BarEntry(4, 16, R.drawable.random_icon));
-        entries.add(new BarEntry(5, 25, R.drawable.random_icon));
-        YAxis yaxis = chart.getAxisLeft();
-        yaxis.setDrawLabels(true);
-        yaxis.setValueFormatter(new IndexAxisValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                return "someString";
-            }
-        });
+        entries.add(new BarEntry(1, 1, "one"));
+        entries.add(new BarEntry(2, 4, "two"));
+        entries.add(new BarEntry(3, 9, "three"));
+        entries.add(new BarEntry(4, 16, "four"));
+        entries.add(new BarEntry(5, 25, "five"));
         BarDataSet dataSet = new BarDataSet(entries, "Label");
         BarData barData = new BarData(dataSet);
+        barData.setValueFormatter(new IValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                return (String)entry.getData();
+            }
+        });
         chart.setData(barData);
         chart.invalidate();
         FloatingActionButton fab = findViewById(R.id.fab);
+        chart.setDrawValueAboveBar(true);
+        chart.setOnChartValueSelectedListener(this);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,6 +103,17 @@ public class AntiProcrastinator extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onValueSelected(Entry e, Highlight h) {
+        Log.i("Developer", e.toString() + " selected");
+        
+    }
+
+    @Override
+    public void onNothingSelected() {
+        Log.i("Developer", "nothing selected");
     }
 
     @Override
