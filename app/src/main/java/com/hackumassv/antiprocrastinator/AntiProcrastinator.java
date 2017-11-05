@@ -49,12 +49,11 @@ import java.util.List;
 import static android.app.AppOpsManager.MODE_ALLOWED;
 import static android.app.AppOpsManager.OPSTR_GET_USAGE_STATS;
 
-public class AntiProcrastinator extends AppCompatActivity implements OnChartValueSelectedListener {
+public class AntiProcrastinator extends AppCompatActivity {
 
     //The manager of stats
     public UsageStatsManager statsManager;
     public HorizontalBarChart chart;
-    protected RectF mOnValueSelectedRectF = new RectF();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +76,6 @@ public class AntiProcrastinator extends AppCompatActivity implements OnChartValu
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         chart = findViewById(R.id.chart);
-        chart.getXAxis().setDrawGridLines(false);
         List<BarEntry> entries = new ArrayList<>();
         for(int i=0; i<testList.size(); i++)
         {
@@ -93,28 +91,26 @@ public class AntiProcrastinator extends AppCompatActivity implements OnChartValu
             }
         });
         chart.setData(barData);
+
+        XAxis xaxis = chart.getXAxis();
+        xaxis.setDrawGridLines(false);
+        xaxis.setDrawLabels(false);
+        xaxis.setDrawAxisLine(false);
+
+        YAxis left = chart.getAxisLeft();
+        left.setDrawGridLines(false);
+        left.setDrawLabels(false);
+        left.setDrawAxisLine(false);
+
+        YAxis right = chart.getAxisRight();
+        right.setDrawGridLines(false);
+        right.setTextSize(12);
+
+        barData.setValueTextSize(12);
+        chart.getDescription().setEnabled(false);
+        chart.getLegend().setTextSize(12);
         chart.invalidate();
-        FloatingActionButton fab = findViewById(R.id.fab);
         chart.setDrawValueAboveBar(true);
-        chart.setOnChartValueSelectedListener(this);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-    }
-
-    @Override
-    public void onValueSelected(Entry e, Highlight h) {
-        Log.i("Developer", e.toString() + " selected");
-    }
-
-    @Override
-    public void onNothingSelected() {
-        Log.i("Developer", "nothing selected");
     }
 
     @Override
